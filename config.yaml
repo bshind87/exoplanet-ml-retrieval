@@ -1,0 +1,124 @@
+# pipeline/config.yaml
+# INARA Exoplanet Atmospheric Retrieval — ML Pipeline Configuration
+# ─────────────────────────────────────────────────────────────────────────────
+# Each pipeline step accepts:
+#   --config pipeline/config.yaml  --profile local|hpc
+#
+# Run all steps locally:  bash jobs/local/run_pipeline.sh
+# Submit to HPC cluster:  bash jobs/slurm/submit_pipeline.sh
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+# ── Step toggles ──────────────────────────────────────────────────────────────
+# Set any step to false to skip it entirely in both the local runner and
+# the SLURM submission script.  Individual steps can always be run manually.
+steps:
+  extract:          true   # Step 1: extract raw tar.gz → processed numpy arrays
+                           #         Set false if processed/ already exists on disk
+  feature_engineer: true   # Step 2: split + Z-normalise + PCA → engineered artifacts
+                           #         Must run once before steps 3-5
+  train_baseline:   true   # Step 3: Random Forest (capped at max_train_samples)
+  train_deep:       true   # Step 4: simple 1D CNN deep model
+  evaluate:         true   # Step 5: unified test evaluation + comparison report
+
+
+# ── Data settings ─────────────────────────────────────────────────────────────
+data:
+  val_frac:  0.15
+  test_frac: 0.15
+  seed:      42
+
+
+# ── Extraction settings ───────────────────────────────────────────────────────
+extraction:
+  n_samples: 124000   # number of samples to extract from archives
+                      # Reduce to 10000-20000 for quick dev/test runs
+  n_workers: 4        # parallel worker processes
+  seed:      42
+
+
+# ── Model settings ────────────────────────────────────────────────────────────
+model:
+  in_channels:    12    # CLIMA profile channels (12 for INARA ATMOS, 3 for PSG)
+  pca_components: 300   # PCA components for RF baseline features
+
+
+# ── Baseline (Random Forest) settings ────────────────────────────────────────
+baseline:
+  max_train_samples: 10000   # RF baseline is ALWAYS capped here regardless of
+                             # dataset size — this is intentional for a "baseline"
+  seed: 42
+
+
+# ── Deep model training settings ─────────────────────────────────────────────
+training:
+  epochs:       150
+  batch_size:   32
+  lr:           0.001
+  weight_decay: 0.0001
+  patience:     30    # early stopping patience (epochs without val improvement)
+
+
+# ── Environment profiles ──────────────────────────────────────────────────────
+profiles:
+
+  local:                                              # Mac M5 — --profile local
+    raw_dir:        /Users/bhalchandra/Downloads/full_inara
+    processed_dir:  inara_data/processed              # relative to project root
+    engineered_dir: inara_data/engineered
+    results_dir:    results/processed
+    models_dir:     models
+    device:         auto                              # auto → MPS on Apple Silicon
+    n_workers:      4
+
+  hpc:                                               # HPC cluster — --profile hpc
+    raw_dir:        /scratch/YOUR_USERNAME/inara/raw      # tar.gz archives live here
+    processed_dir:  /scratch/YOUR_USERNAME/inara/processed
+    engineered_dir: /scratch/YOUR_USERNAME/inara/engineered
+    results_dir:    /scratch/YOUR_USERNAME/inara/results/processed
+    models_dir:     /scratch/YOUR_USERNAME/inara/models
+    device:         auto                              # auto → CUDA on GPU nodes
+    n_workers:      8
+
+
+# ── SLURM settings (HPC only) ─────────────────────────────────────────────────
+# Partition names below are common defaults on Explorer.
+# Check available partitions with: sinfo -s
+# Update partition names to match what your account has access to.
+slurm:
+  account:   ""                             # leave blank if no --account needed
+  email:     your_email@institution.edu     # your email for SLURM job notifications
+  conda_env: inara_env                      # conda environment with all dependencies
+  code_dir:  /home/YOUR_USERNAME/exo-atmos-retrieval  # where you cloned the repo
+
+  jobs:
+    extract:
+      partition:  short                     # CPU-only, sequential I/O from tar.gz
+      time:       "04:00:00"
+      mem:        "32G"
+      cpus:       8
+
+    feature_engineer:
+      partition:  short                     # CPU-only: split + scaler + PCA
+      time:       "01:00:00"
+      mem:        "16G"
+      cpus:       4
+
+    train_baseline:
+      partition:  short                     # CPU-only: Random Forest
+      time:       "01:00:00"
+      mem:        "16G"
+      cpus:       8
+
+    train_deep:
+      partition:  gpu                       # Requires GPU
+      time:       "08:00:00"
+      mem:        "32G"
+      cpus:       4
+      gpus:       1
+
+    evaluate:
+      partition:  short                     # CPU-only: load predictions, compute metrics
+      time:       "00:30:00"
+      mem:        "8G"
+      cpus:       2
