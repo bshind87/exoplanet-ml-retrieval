@@ -57,7 +57,7 @@ a Random Forest (RF) baseline—across training set sizes from 1{,}000 to
 86{,}800 samples, with statistical validation across five random seeds.
 
 Our main findings are: (1) the 1D CNN achieves mean $R^2 = 0.9993 \pm
-<0.0001$ on ten atmospheric molecules at 86{,}800 training samples, compared to
+{<}0.0001$ on ten atmospheric molecules at 86{,}800 training samples, compared to
 $0.8295 \pm 0.0053$ for the RF baseline—a gap that is statistically decisive
 and reproducible; (2) a flat MLP achieves nearly identical accuracy to the CNN
 ($\Delta R^2 = +0.0007$) while requiring 2.6$\times$ more parameters (963K
@@ -226,12 +226,7 @@ profile and produces predictions via 12 molecule-specific output heads
 
 \begin{figure}[t]
   \centering
-  \fbox{\parbox{0.85\textwidth}{\centering\vspace{1em}
-    \textbf{[Architecture diagram placeholder]}\\[0.5em]
-    Input $(B,12,101)$ $\to$ Conv blocks (32/64/128/256 filters) $\to$
-    AdaptiveAvgPool $\to$ FC(256$\to$128)+LN+ReLU $\to$
-    12 per-molecule heads $\to$ $\hat{y}_1,\ldots,\hat{y}_{12}$
-  \vspace{1em}}}
+  \includegraphics[width=\textwidth]{figures/fig1_architecture.png}
   \caption{1D CNN architecture. Four convolutional blocks progressively
            compress the 101-level altitude dimension; a shared projection
            layer produces a 128-dimensional embedding fed to 12 independent
@@ -297,8 +292,7 @@ comparison:
   \item \textbf{Early stopping:} Patience of 30 epochs on validation loss.
   \item \textbf{Augmentation:} Gaussian noise ($\sigma=0.01$) applied to
         training spectra only.
-  \item \textbf{Batch size:} 32. Device: Apple MPS (M5 Pro) for local runs;
-        CUDA V100 for HPC.
+  \item \textbf{Batch size:} 32. Device: Apple MPS (M5 Pro, PyTorch~2.8).
 \end{itemize}
 
 \subsection{Evaluation Metrics}
@@ -313,7 +307,7 @@ molecules (excluding NH$_3$ and H$_2$O unless stated).
 \section{Experiments}
 \label{sec:experiments}
 
-We conduct three experiments, each targeting a distinct reviewer concern:
+We conduct three experiments, each addressing a distinct research question:
 (i)~\textit{scaling study} — does the CNN advantage persist across data regimes?
 (ii)~\textit{MLP ablation} — does convolution matter?
 (iii)~\textit{multi-seed validation} — are the results reproducible?
