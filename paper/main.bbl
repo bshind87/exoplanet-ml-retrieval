@@ -33,7 +33,7 @@ Timothy~D. Gebhard et~al.
 \newblock \emph{Astronomy \& Astrophysics}, 2024.
 \newblock arXiv:2305.17161.
 
-\bibitem[Leung \& Bovy(2019)Leung and Bovy]{leung2019}
+\bibitem[Leung and Bovy(2019)]{leung2019}
 Henry~W. Leung and Jo~Bovy.
 \newblock Deep learning of multi-element abundances from high-resolution
   spectroscopic data.
@@ -41,14 +41,14 @@ Henry~W. Leung and Jo~Bovy.
   483\penalty0 (3):\penalty0 3255--3277, 2019.
 \newblock \doi{10.1093/mnras/sty3217}.
 
-\bibitem[Loshchilov \& Hutter(2017)Loshchilov and Hutter]{loshchilov2017}
+\bibitem[Loshchilov and Hutter(2017)]{loshchilov2017}
 Ilya Loshchilov and Frank Hutter.
 \newblock {SGDR}: Stochastic gradient descent with warm restarts.
 \newblock In \emph{International Conference on Learning Representations
   (ICLR)}, 2017.
 \newblock URL \url{https://openreview.net/forum?id=Bjf73e9lx}.
 
-\bibitem[Loshchilov \& Hutter(2019)Loshchilov and Hutter]{loshchilov2019}
+\bibitem[Loshchilov and Hutter(2019)]{loshchilov2019}
 Ilya Loshchilov and Frank Hutter.
 \newblock Decoupled weight decay regularization.
 \newblock In \emph{International Conference on Learning Representations
@@ -72,7 +72,7 @@ Pablo M{\'a}rquez-Neila, Chloe Fisher, Raphael Sznitman, and Kevin Heng.
 \bibitem[Skilling(2004)]{skilling2004}
 John Skilling.
 \newblock Nested sampling.
-\newblock In \emph{AIP Conference Proceedings}, volume 735, pp.\  395--405,
+\newblock In \emph{AIP Conference Proceedings}, volume 735, pages 395--405,
   2004.
 \newblock \doi{10.1063/1.1835238}.
 

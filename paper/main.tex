@@ -1,18 +1,21 @@
-% arXiv preprint
+% arXiv preprint — April 2026
 % Compile: pdflatex main && bibtex main && pdflatex main && pdflatex main
 \pdfoutput=1
 
-\documentclass[10pt]{article}
-\usepackage[preprint]{tmlr}
+\documentclass[11pt]{article}
 
-% Additional packages not provided by tmlr.sty
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{subcaption}
-\usepackage{hyperref}
+\usepackage[authoryear,round]{natbib}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \usepackage{url}
+\usepackage{microtype}
 
 % ── Macros ────────────────────────────────────────────────────────────────────
 \newcommand{\rsq}{$R^2$}
@@ -33,6 +36,8 @@
     \small\textit{Northeastern University} & &
   \end{tabular}%
 }
+
+\date{April 2026}
 
 \begin{document}
 \maketitle
@@ -569,7 +574,7 @@ out-of-distribution stellar conditions.
 \section*{Reproducibility Statement}
 
 All code, trained model weights, and experiment configuration files are
-available at \url{https://github.com/bshind87/INARA-ExoplanetAtmosphericRetrieval}. The INARA~ATMOS
+available at \url{https://github.com/bshind87/exoplanet-ml-retrieval}. The INARA~ATMOS
 dataset is publicly available from NASA FDL / \citet{zorzan2025}. Experiments
 were run with PyTorch~2.8, scikit-learn~1.4, and Python~3.11 (requirements in
 \texttt{requirements.txt}). All random seeds used in the multi-seed study
@@ -594,7 +599,7 @@ publicly available. Experiments were run on a local Apple M5 Pro workstation.
 
 
 % ── References ────────────────────────────────────────────────────────────────
-\bibliographystyle{tmlr}
+\bibliographystyle{plainnat}
 \bibliography{references}
 
 \end{document}
